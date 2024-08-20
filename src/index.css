@@ -6,3 +6,6 @@
   @apply max-w-screen-sm max-h-[1280px] h-screen border-2 border-darker-200;
 }
 
+.btn {
+ @apply block w-fit bg-aro-800 text-white font-semibold py-2 px-4 rounded-md shadow-sm hover:bg-aro-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-aro-200 transition duration-150 ease-in-out;
+}
