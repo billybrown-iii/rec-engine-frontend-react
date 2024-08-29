@@ -2,6 +2,7 @@
     "compilerOptions": {
       "jsx": "react-jsx",
       "baseUrl": ".",
+      "strict": false,
       "paths": {
         "@components/*": ["src/components/*"],
         "@utils/*": ["src/utils/*"]
