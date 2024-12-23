@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Trash, Plus } from 'react-feather';
 
 
 export default function Setup ({setTasteProfile}) {
@@ -17,8 +18,21 @@ export default function Setup ({setTasteProfile}) {
       setGames(updatedGames);
       setNextGame('');
 
-      console.log(games)
+      console.log(updatedGames)
 
+      setTasteProfile(tasteProfile => {
+        return {
+          ...tasteProfile,
+          games: updatedGames,
+        }
+      })
+    }
+
+    const deleteGame = game => {
+      const updatedGames = games.filter(x => x !== game);
+      console.log(updatedGames)
+
+      setGames(updatedGames);
       setTasteProfile(tasteProfile => {
         return {
           ...tasteProfile,
@@ -34,9 +48,21 @@ export default function Setup ({setTasteProfile}) {
         
         <div className="text-lg mb-2">Games:</div>
         {/* <hr /> */}
-        {/* map of one?  how about no */}
         {games.map((game, index) => {
-          return <div className="bg-aro-700 p-2 rounded-xl w-fit min-w-60 my-2" key={index}>{game}</div>
+          return <div key={index} className="flex">
+            <div className="bg-aro-700 p-3 px-4 rounded-xl w-fit min-w-60 my-2">
+              {game}
+            </div>
+            {/* <div> */}
+              <button 
+                className='mx-2 my-auto p-2 h-fit border-2 rounded-xl' 
+                onClick={() => deleteGame(game)}
+                >
+                <Trash size={16} className='text-nosferatu-50' />
+              </button>
+              
+            {/* </div> */}
+          </div> 
         })}
         <span>
               <form onSubmit={addGame}>
@@ -48,10 +74,10 @@ export default function Setup ({setTasteProfile}) {
                   />
                 <button 
                   type="submit" 
-                  className='mx-2 p-2 border-2 rounded-full' 
+                  className='mx-2 my-auto p-2 h-fit border-2 rounded-xl' 
                   onClick={addGame}
                   >
-                  +
+                  <Plus size={16} className='text-nosferatu-50' />
                 </button>
               </form>
             </span>
