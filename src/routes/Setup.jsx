@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { Trash, Plus } from 'react-feather';
+import { TasteProfileContext } from '..//TasteProfileContext';
 
 
-export default function Setup ({setTasteProfile}) {
+export default function Setup () {
     // react router subroutes are probably easier, tbh.
     // /const [currentView, setCurrentView] = useState('')
+    const { setTasteProfile } = useContext(TasteProfileContext);
 
     const [games, setGames] = useState([])
     const [nextGame, setNextGame] = useState('')
@@ -41,6 +43,25 @@ export default function Setup ({setTasteProfile}) {
       })
     }
 
+    const updateGame = (newValue, indexToUpdate) => {
+      // const affectedGame = games[indexToUpdate];
+
+      const updatedGames = games.map((game, index) => {
+        if (index === indexToUpdate) {
+          return newValue;
+        }
+        return game;
+      })
+
+      setGames(updatedGames)
+      setTasteProfile(tasteProfile => {
+        return {
+          ...tasteProfile,
+          games: updatedGames,
+        }
+      })
+    }
+
     return <>
     <div>
         <div className="text-xl">Name some favorites pls</div>
@@ -49,10 +70,13 @@ export default function Setup ({setTasteProfile}) {
         <div className="text-lg mb-2">Games:</div>
         {/* <hr /> */}
         {games.map((game, index) => {
-          return <div key={index} className="flex">
-            <div className="bg-aro-700 p-3 px-4 rounded-xl w-fit min-w-60 my-2">
-              {game}
-            </div>
+          return <div key={index} className="flex  mb-3">
+                <input 
+                  type="text"
+                  value={game}
+                  onChange={e => updateGame(e.target.value, index)}
+                  className = 'bg-aro-700 p-2 rounded-xl w-fit min-w-60'
+                  />
             {/* <div> */}
               <button 
                 className='mx-2 my-auto p-2 h-fit border-2 rounded-xl' 
