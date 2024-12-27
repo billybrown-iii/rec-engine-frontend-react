@@ -27,11 +27,6 @@ function App() {
               <Route path="/discover" element={<Discover />} />
             </Routes>
           </div>
-
-        {/* <ApiResponseDisplay /> */}
-
-
-
         </div>
       </Router>
     </TasteProfileContext.Provider>
