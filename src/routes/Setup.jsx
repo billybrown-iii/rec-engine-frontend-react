@@ -6,9 +6,10 @@ import { TasteProfileContext } from '..//TasteProfileContext';
 export default function Setup () {
     // react router subroutes are probably easier, tbh.
     // /const [currentView, setCurrentView] = useState('')
-    const { setTasteProfile } = useContext(TasteProfileContext);
+    const { tasteProfile, setTasteProfile } = useContext(TasteProfileContext);
 
-    const [games, setGames] = useState([])
+    // why have this in state?  just use the context value.
+    const [games, setGames] = useState(tasteProfile.games ?? [])
     const [nextGame, setNextGame] = useState('')
 
     function addGame(e) {

@@ -1,3 +1,7 @@
 import { createContext } from "react";
 
-export const TasteProfileContext = createContext({})
+const defaultTasteProfile = {
+    games: [],
+}
+
+export const TasteProfileContext = createContext(defaultTasteProfile)
