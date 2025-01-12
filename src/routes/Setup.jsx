@@ -1,111 +1,106 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { Trash, Plus } from 'react-feather';
 import { TasteProfileContext } from '..//TasteProfileContext';
 
 
-export default function Setup () {
-    // react router subroutes are probably easier, tbh.
-    // /const [currentView, setCurrentView] = useState('')
-    const { tasteProfile, setTasteProfile } = useContext(TasteProfileContext);
+function SetupMediaType ({ preexistingMediaList, mediaType, setTasteProfile }) {
+  // I think I'll just use mini component state, and useEffect to update the global config.
+  // this way the code reads pretty simply, and I'm not digging thru the object tree all over the place.
 
-    // why have this in state?  just use the context value.
-    const [games, setGames] = useState(tasteProfile.games ?? [])
-    const [nextGame, setNextGame] = useState('')
+  // TODO set its initial value to [''];
+  const [mediaList, setMediaList] = useState(preexistingMediaList);
 
-    function addGame(e) {
-      e.preventDefault();
-      // console.log('add game')
+  function updateMediaListItem (newValue, indexToUpdate) {
+    const updatedMediaList = mediaList.map((mediaListItem, index) => {
+      if (index === indexToUpdate) {
+        return newValue;
+      }
+      return mediaListItem;
+    })
 
-      const updatedGames = [...games, nextGame]
+    setMediaList(updatedMediaList);
+  }
 
-      setGames(updatedGames);
-      setNextGame('');
-
-      console.log(updatedGames)
-
-      setTasteProfile(tasteProfile => {
-        return {
-          ...tasteProfile,
-          games: updatedGames,
-        }
-      })
+  function deleteMediaListItem (indexToDelete) {
+    if (mediaList.length === 1) {
+      return;
     }
 
-    const deleteGame = game => {
-      const updatedGames = games.filter(x => x !== game);
-      console.log(updatedGames)
+    const updatedMediaList = mediaList.filter((x, index) => index !== indexToDelete);
 
-      setGames(updatedGames);
-      setTasteProfile(tasteProfile => {
-        return {
-          ...tasteProfile,
-          games: updatedGames,
-        }
-      })
+    setMediaList(updatedMediaList);
+  }
+
+  function addNewMediaListItem () {
+    if (mediaList.includes('')) {
+      return alert('Please populate blank items before adding new ones.')
     }
 
-    const updateGame = (newValue, indexToUpdate) => {
-      // const affectedGame = games[indexToUpdate];
+    const updatedMediaList = [...mediaList, ''];
 
-      const updatedGames = games.map((game, index) => {
-        if (index === indexToUpdate) {
-          return newValue;
-        }
-        return game;
-      })
+    setMediaList(updatedMediaList);
+  }
 
-      setGames(updatedGames)
-      setTasteProfile(tasteProfile => {
-        return {
-          ...tasteProfile,
-          games: updatedGames,
-        }
-      })
-    }
+// useEffect:  on changes to mediaList, call setTasteProfile
+  useEffect(() => {
+    setTasteProfile(tasteProfile => {
+      return {
+        ...tasteProfile,
+        [mediaType.toLowerCase() + 's']: mediaList,
+      }
+    })
+  }, [mediaList, mediaType, setTasteProfile])
+  
 
-    return <>
+
+  return <>
     <div>
-        <div className="text-xl">Name some favorites pls</div>
+        <div className="text-xl mb-2">Set up your taste profile by adding things you like.</div>
         <hr />
         
-        <div className="text-lg mb-2">Games:</div>
-        {/* <hr /> */}
-        {games.map((game, index) => {
+        <div className="text-lg mb-2">{mediaType}s:</div>
+        {mediaList.map((mediaListItem, index) => {
           return <div key={index} className="flex  mb-3">
                 <input 
                   type="text"
-                  value={game}
-                  onChange={e => updateGame(e.target.value, index)}
+                  value={mediaListItem}
+                  onChange={e => updateMediaListItem(e.target.value, index)}
                   className = 'bg-aro-700 p-2 rounded-xl w-fit min-w-60'
                   />
-            {/* <div> */}
               <button 
                 className='mx-2 my-auto p-2 h-fit border-2 rounded-xl' 
-                onClick={() => deleteGame(game)}
+                onClick={() => deleteMediaListItem(index)}
                 >
                 <Trash size={16} className='text-nosferatu-50' />
               </button>
               
-            {/* </div> */}
           </div> 
         })}
-        <span>
-              <form onSubmit={addGame}>
-                <input 
-                  type="text"
-                  value={nextGame}
-                  onChange={e => setNextGame(e.target.value)}
-                  className = 'bg-aro-700 p-2 rounded-xl w-fit min-w-60'
-                  />
-                <button 
-                  type="submit" 
-                  className='mx-2 my-auto p-2 h-fit border-2 rounded-xl' 
-                  onClick={addGame}
-                  >
-                  <Plus size={16} className='text-nosferatu-50' />
-                </button>
-              </form>
-            </span>
+        {/* TODO on key press enter, add new one */}
+        {/* Also, auto text focus the newly added one */}
+        <div>
+            <button 
+              type="submit" 
+              className='mx-2 my-auto p-2 h-fit border-2 rounded-xl' 
+              onClick={addNewMediaListItem}
+              >
+              <Plus size={16} className='text-nosferatu-50' />
+            </button>
+        </div>
     </div>
-    </> 
+  </> 
+}
+
+export default function Setup () {
+    const { tasteProfile, setTasteProfile } = useContext(TasteProfileContext);
+
+  return <>
+    <SetupMediaType 
+      mediaType="Game" 
+      tasteProfile={tasteProfile}  
+      setTasteProfile={setTasteProfile} 
+      preexistingMediaList={tasteProfile.games}
+      />
+  </>
+
 }

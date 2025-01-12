@@ -6,12 +6,15 @@ import Nav from './components/Nav'
 import { useState } from 'react'
 import { TasteProfileContext } from './TasteProfileContext';
 
+const defaultTasteProfile = {
+  games: [''],
+}
 
 
 function App() {
   // taste profile feels like context territory.
   // initialize via local stiorage (for now)
-  const [tasteProfile, setTasteProfile] = useState({});
+  const [tasteProfile, setTasteProfile] = useState(defaultTasteProfile);
 
   return (
     // XContext.Provider is a component that takes a value prop.  
