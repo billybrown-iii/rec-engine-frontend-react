@@ -21,8 +21,15 @@ export default function Discover () {
        
         async function handleClick () {
 
+          const tasteProfileToSend = {
+            books: tasteProfile.books.filter(book => book !== ''),
+            films: tasteProfile.films.filter(film => film !== ''),
+            shows: tasteProfile.shows.filter(show => show !== ''),
+            games: tasteProfile.games.filter(game => game !== ''),
+          }
+
           const requestBody = JSON.stringify({
-            tasteProfile,
+            tasteProfile: tasteProfileToSend,
             selectedMediaType,
           });
 

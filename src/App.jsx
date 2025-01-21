@@ -7,6 +7,9 @@ import { useState } from 'react'
 import { TasteProfileContext } from './TasteProfileContext';
 
 const defaultTasteProfile = {
+  books: [''],
+  films: [''],
+  shows: [''],
   games: [''],
 }
 
