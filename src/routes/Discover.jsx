@@ -1,13 +1,7 @@
 import { useContext, useState } from "react"
 import { TasteProfileContext } from "../TasteProfileContext"
+import DiscoverFilms from "../components/films/DiscoverFilms";
 
-import { Ring } from '@uiball/loaders';
-
-function LoadingSpinner() {
-    return <div className="w-fit mx-auto text-nosferatu-50">
-        <Ring size={40} lineWeight={5} speed={2} color="white" />
-      </div>
-}
 
 
 export default function Discover () {
@@ -16,20 +10,13 @@ export default function Discover () {
     
     console.log(tasteProfile)
         const [suggestions, setSuggestions] = useState([])
-        const [selectedMediaType, setSelectedMediaType] = useState('Book');
+        const [selectedMediaType, setSelectedMediaType] = useState('Film');
         const [isFetching, setIsFetching] = useState(false);
        
         async function handleClick () {
 
-          const tasteProfileToSend = {
-            books: tasteProfile.books.filter(book => book !== ''),
-            films: tasteProfile.films.filter(film => film !== ''),
-            shows: tasteProfile.shows.filter(show => show !== ''),
-            games: tasteProfile.games.filter(game => game !== ''),
-          }
-
           const requestBody = JSON.stringify({
-            tasteProfile: tasteProfileToSend,
+            // tasteProfile: tasteProfileToSend,
             selectedMediaType,
           });
 
@@ -63,7 +50,7 @@ export default function Discover () {
     return <>
         <Dropdown selectedMediaType={selectedMediaType} setSelectedMediaType={setSelectedMediaType} />
 
-        <button className="border-2 m-2 p-3 w-fit" onClick={handleClick}>Click me</button>
+        {selectedMediaType === 'Film' && <DiscoverFilms />}
 
         {isFetching && <LoadingSpinner />}
 
@@ -79,21 +66,25 @@ function Dropdown ({selectedMediaType, setSelectedMediaType}) {
       };
     
       return (
-        <div>
-          <label htmlFor="category" className="text-gray-200 mb-2">
-            Find new:
-          </label>
-          <select
-            id="category"
-            value={selectedMediaType}
-            onChange={handleChange}
-            className="border-2 border-gray-600 rounded-md p-2 m-2 bg-aro-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="Book">Books</option>
-            <option value="Film">Films</option>
-            <option value="Show">Shows</option>
-            <option value="Game">Games</option>
-          </select>
-        </div>
+        <>
+          <div className="w-fit m-auto">
+            <label htmlFor="category" className="text-lg mb-2">
+              Find new:
+            </label>
+            <select
+              id="category"
+              value={selectedMediaType}
+              onChange={handleChange}
+              className="border-2 border-gray-600 rounded-md p-2 m-2 bg-aro-800 text-gray-200 text-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="Film">Films</option>
+              <option value="Book">Books</option>
+              <option value="Show">Shows</option>
+              <option value="Game">Games</option>
+            </select>
+          </div>
+          {/* hr with extra thickness */}
+          <hr className="border-gray-500 border-2 rounded" />
+        </>
       );
 }

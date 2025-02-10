@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .mobile-constrained-segment {
-  @apply max-w-screen-sm max-h-[800px] overflow-scroll h-screen bg-darker-800 rounded-3xl m-10 p-10 mx-auto;
+  @apply max-w-screen-sm max-h-[800px] overflow-scroll h-screen bg-darker-800 text-gray-200 rounded-3xl m-10 p-10 mx-auto;
 }
 
 .btn {
