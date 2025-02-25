@@ -6,12 +6,14 @@ export default function FilmSettings ({settings, setSettings}) {
   const [qualitiesText, setQualitiesText] = useState('');
 
   function handleChangedGenre (event) {
-    setGenre(event.target.value);
+    const genre = event.target.value === 'All' ? '' : event.target.value;
+
+    setGenre(genre);
 
     setSettings(priorSettings => {
       return {
         ...priorSettings,
-        genre: event.target.value,
+        genre,
       }
     })
   }
@@ -53,11 +55,11 @@ export default function FilmSettings ({settings, setSettings}) {
         htmlFor="qualities"
         className="mb-2"
       >
-        Qualities / Characteristics
+        Keywords / Characteristics
       </label>
 
       <div className="text-xs text-gray-400 mb-2">
-        You can use keywords or full sentences.  e.g. &quot;zombies&quot; or &quot;something set in 19th-century Europe&quot;
+        You can use keywords or sentences, e.g. &quot;zombies&quot; or &quot;something set in 19th-century Europe&quot;
       </div>
 
       <textarea
